@@ -1,0 +1,440 @@
+{
+  "build": {},
+  "deploy": {
+    "commands": [
+      [
+        "exec",
+        "true"
+      ]
+    ],
+    "dependencies": {
+      "compute": {
+        "repo_class_name": "hmd-cli-neuronsphere",
+        "required": "true"
+      },
+      "database-instance": {
+        "repo_class_name": "hmd-postgres-rds",
+        "required": "true"
+      },
+      "eks-cluster": {
+        "repo_class_name": "hmd-inf-eks-cluster",
+        "required": "true"
+      },
+      "ext-secrets": {
+        "repo_class_name": "hmd-inf-ext-secrets",
+        "required": "true"
+      },
+      "graph-db": {
+        "repo_class_name": "hmd-inf-neptune",
+        "required": "true"
+      }
+    }
+  },
+  "description": "Airflow, Trino and Superset with what they need -- the smallest useful NeuronSphere analytics platform",
+  "license": "Apache-2.0",
+  "local": {
+    "default_profiles": [
+      "airflow",
+      "superset",
+      "trino"
+    ],
+    "dependencies": {
+      "compute": {
+        "bind": "local-neuronsphere"
+      },
+      "database-instance": {
+        "bind": "environment-db"
+      },
+      "eks-cluster": {
+        "bind": "eks-cluster"
+      },
+      "ext-secrets": {
+        "bind": "ext-secrets"
+      },
+      "graph-db": {
+        "bind": "global-graph"
+      }
+    },
+    "repos": [
+      {
+        "dependencies": {
+          "compute": "local-neuronsphere",
+          "db-credentials": "superset-db-account",
+          "eks-alb": "local-neuronsphere",
+          "ext-secrets": "ext-secrets",
+          "redis": "redis",
+          "secret-key": "secret-key"
+        },
+        "instance_configuration": {
+          "alertReports": {
+            "enabled": false
+          },
+          "okta_oauth": false,
+          "replicaCount": 1,
+          "resources": {
+            "limits": {
+              "cpu": "2000m",
+              "memory": "3Gi"
+            },
+            "requests": {
+              "cpu": "250m",
+              "memory": "1536Mi"
+            }
+          },
+          "supersetWorker": {
+            "resources": {
+              "limits": {
+                "cpu": "1000m",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "768Mi"
+              }
+            }
+          }
+        },
+        "instance_name": "superset",
+        "profiles": [
+          "superset"
+        ],
+        "repo_class_name": "hmd-inf-superset",
+        "version_spec": "== 0.5.237"
+      },
+      {
+        "dependencies": {
+          "compute": "local-neuronsphere",
+          "eks-alb": "local-neuronsphere",
+          "ext-secrets": "ext-secrets",
+          "graph-db": "global-graph",
+          "metastore": "hive-metastore",
+          "users": "trino-users",
+          "worker-compute": "local-neuronsphere"
+        },
+        "instance_configuration": {
+          "connectors": {
+            "graph.properties": "connector.name=nsgraph\nhost=global-graph\nport=8182\nprotocol=ws\n"
+          },
+          "coordinatorResources": {
+            "limits": {
+              "cpu": "2000m",
+              "memory": "2560Mi"
+            },
+            "requests": {
+              "cpu": "500m",
+              "memory": "1792Mi"
+            }
+          },
+          "graph_endpoint": "",
+          "hive_properties": {
+            "s3.aws-access-key": "test",
+            "s3.aws-secret-key": "test",
+            "s3.endpoint": "http://neuronsphere:4566",
+            "s3.path-style-access": "true",
+            "s3.region": "us-east-1"
+          },
+          "server": {
+            "config": {
+              "authenticationType": "",
+              "query": {
+                "heapHeadroomPerNode": "384MB",
+                "maxMemory": "1GB",
+                "maxMemoryPerNode": "512MB",
+                "maxTotalMemory": "2GB"
+              }
+            },
+            "jvm": {
+              "coordinatorMaxHeapSize": "1G",
+              "workerMaxHeapSize": "1536M"
+            },
+            "readinessProbe": {
+              "failureThreshold": 12
+            },
+            "workers": 1
+          },
+          "workerResources": {
+            "limits": {
+              "cpu": "2000m",
+              "memory": "3Gi"
+            },
+            "requests": {
+              "cpu": "500m",
+              "memory": "2560Mi"
+            }
+          }
+        },
+        "instance_name": "trino",
+        "profiles": [
+          "trino"
+        ],
+        "repo_class_name": "hmd-inf-trino",
+        "version_spec": "== 0.1.225"
+      },
+      {
+        "dependencies": {
+          "compute": "local-neuronsphere",
+          "db-credentials": "airflow-db-account",
+          "ebs-addon": "local-neuronsphere",
+          "eks-alb": "local-neuronsphere",
+          "eks-cluster": "eks-cluster",
+          "ext-secrets": "ext-secrets",
+          "logs": "airflow-logs",
+          "neptune": "global-graph",
+          "redis": "redis",
+          "storage": "local-neuronsphere",
+          "trino": "trino",
+          "trino-user": "trino-users",
+          "worker-compute": "local-neuronsphere"
+        },
+        "instance_configuration": {
+          "airflow": {
+            "config": {
+              "AIRFLOW__CELERY__WORKER_CONCURRENCY": "4",
+              "AIRFLOW__CORE__LOAD_EXAMPLES": "False",
+              "AIRFLOW__WEBSERVER__WORKERS": "2",
+              "AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL": "6000"
+            },
+            "extraEnv": [
+              {
+                "name": "HMD_ARTIFACT_LIBRARIAN_URL",
+                "value": "http://hmd_proxy/hmd_ms_artifact_lib/"
+              },
+              {
+                "name": "HMD_ARTIFACT_LIBRARIAN_API_KEY",
+                "value": "local-dummy"
+              },
+              {
+                "name": "AWS_ENDPOINT_URL",
+                "value": "http://neuronsphere:4566"
+              }
+            ],
+            "image": {
+              "tag": "0.4.169-local"
+            },
+            "kubernetesPodTemplate": {
+              "resources": {
+                "requests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+                }
+              }
+            },
+            "users": [
+              {
+                "email": "airflow@localhost",
+                "firstName": "Airflow",
+                "lastName": "Admin",
+                "password": "airflow",
+                "role": "Admin",
+                "username": "airflow"
+              }
+            ]
+          },
+          "dagSync": {
+            "enabled": false
+          },
+          "externalDatabase": {
+            "host": "hmd_db"
+          },
+          "okta_oauth": false,
+          "persistence": {
+            "access_mode": "ReadWriteOnce",
+            "storage_class": "local-path"
+          },
+          "pgbouncer": {
+            "replicas": 1,
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "256Mi"
+              },
+              "requests": {
+                "cpu": "25m",
+                "memory": "64Mi"
+              }
+            }
+          },
+          "scheduler": {
+            "resources": {
+              "limits": {
+                "cpu": "1000m",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "200m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          "triggerer": {
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "50m",
+                "memory": "256Mi"
+              }
+            }
+          },
+          "web": {
+            "replicas": 1,
+            "resources": {
+              "limits": {
+                "cpu": "1000m",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "200m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          "workers": {
+            "autoscaling": {
+              "enabled": false
+            },
+            "replicas": 1,
+            "resources": {
+              "limits": {
+                "cpu": "2000m",
+                "memory": "2560Mi"
+              },
+              "requests": {
+                "cpu": "200m",
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        "instance_name": "airflow",
+        "profiles": [
+          "airflow"
+        ],
+        "repo_class_name": "hmd-app-airflow",
+        "version_spec": "== 0.4.348"
+      },
+      {
+        "dependencies": {
+          "create-service": "local-neuronsphere",
+          "database-instance": "environment-db"
+        },
+        "instance_configuration": {
+          "db_name": "superset",
+          "username": "superset"
+        },
+        "instance_name": "superset-db-account",
+        "repo_class_name": "hmd-database-account",
+        "version_spec": "== 0.1.3"
+      },
+      {
+        "dependencies": {
+          "compute": "local-neuronsphere",
+          "eks-cluster": "eks-cluster",
+          "ext-secrets": "ext-secrets"
+        },
+        "instance_configuration": {
+          "persistence": {
+            "storage_class": "local-path"
+          },
+          "replicas": 1
+        },
+        "instance_name": "redis",
+        "repo_class_name": "hmd-inf-redis",
+        "version_spec": "== 0.1.47"
+      },
+      {
+        "instance_name": "secret-key",
+        "repo_class_name": "hmd-inf-superset-secret-key",
+        "version_spec": "== 0.1.8"
+      },
+      {
+        "dependencies": {
+          "base-vpc": "local-neuronsphere",
+          "compute": "local-neuronsphere",
+          "db-credentials": "hive-metastore-db-account",
+          "eks-alb": "local-neuronsphere",
+          "ext-secrets": "ext-secrets"
+        },
+        "instance_configuration": {
+          "conf": {
+            "metastoreSite": {
+              "fs.s3a.access.key": "test",
+              "fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider",
+              "fs.s3a.connection.ssl.enabled": "false",
+              "fs.s3a.endpoint": "http://neuronsphere:4566",
+              "fs.s3a.path.style.access": "true",
+              "fs.s3a.secret.key": "test"
+            }
+          },
+          "initResources": {
+            "limits": {
+              "cpu": "500m",
+              "memory": "768Mi"
+            },
+            "requests": {
+              "cpu": "100m",
+              "memory": "256Mi"
+            }
+          },
+          "replicaCount": 1,
+          "resources": {
+            "limits": {
+              "cpu": "1000m",
+              "memory": "2Gi"
+            },
+            "requests": {
+              "cpu": "250m",
+              "memory": "768Mi"
+            }
+          }
+        },
+        "instance_name": "hive-metastore",
+        "repo_class_name": "hmd-inf-hive-metastore",
+        "version_spec": "== 0.2.91"
+      },
+      {
+        "instance_configuration": {
+          "username": "trino-users"
+        },
+        "instance_name": "trino-users",
+        "repo_class_name": "hmd-inf-credentials",
+        "version_spec": "== 0.1.6"
+      },
+      {
+        "dependencies": {
+          "create-service": "local-neuronsphere",
+          "database-instance": "environment-db"
+        },
+        "instance_configuration": {
+          "db_name": "airflow",
+          "username": "airflow"
+        },
+        "instance_name": "airflow-db-account",
+        "repo_class_name": "hmd-database-account",
+        "version_spec": "== 0.1.3"
+      },
+      {
+        "instance_name": "airflow-logs",
+        "repo_class_name": "hmd-inf-s3bucket",
+        "version_spec": "== 0.1.18"
+      },
+      {
+        "dependencies": {
+          "create-service": "local-neuronsphere",
+          "database-instance": "environment-db"
+        },
+        "instance_configuration": {
+          "db_name": "hive_metastore",
+          "username": "hive_metastore"
+        },
+        "instance_name": "hive-metastore-db-account",
+        "repo_class_name": "hmd-database-account",
+        "version_spec": "== 0.1.3"
+      }
+    ],
+    "version": 1
+  },
+  "name": "hmd-stack-analytics"
+}

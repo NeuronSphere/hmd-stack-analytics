@@ -1,0 +1,923 @@
+[
+  {
+    "repo_instance_name": "airflow",
+    "repo_class_name": "hmd-app-airflow",
+    "repo_class_version": "0.4.348",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "airflow": {
+        "config": {
+          "AIRFLOW__CELERY__WORKER_CONCURRENCY": "4",
+          "AIRFLOW__CORE__LOAD_EXAMPLES": "False",
+          "AIRFLOW__WEBSERVER__WORKERS": "2",
+          "AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL": "6000"
+        },
+        "extraEnv": [
+          {
+            "name": "HMD_ARTIFACT_LIBRARIAN_URL",
+            "value": "http://hmd_proxy/hmd_ms_artifact_lib/"
+          },
+          {
+            "name": "HMD_ARTIFACT_LIBRARIAN_API_KEY",
+            "value": "local-dummy"
+          },
+          {
+            "name": "AWS_ENDPOINT_URL",
+            "value": "http://neuronsphere:4566"
+          }
+        ],
+        "image": {
+          "tag": "0.4.169-local"
+        },
+        "kubernetesPodTemplate": {
+          "resources": {
+            "requests": {
+              "cpu": "50m",
+              "memory": "128Mi"
+            }
+          }
+        },
+        "users": [
+          {
+            "email": "airflow@localhost",
+            "firstName": "Airflow",
+            "lastName": "Admin",
+            "password": "airflow",
+            "role": "Admin",
+            "username": "airflow"
+          }
+        ]
+      },
+      "dagSync": {
+        "enabled": false
+      },
+      "externalDatabase": {
+        "host": "hmd_db"
+      },
+      "okta_oauth": false,
+      "persistence": {
+        "access_mode": "ReadWriteOnce",
+        "storage_class": "local-path"
+      },
+      "pgbouncer": {
+        "replicas": 1,
+        "resources": {
+          "limits": {
+            "cpu": "500m",
+            "memory": "256Mi"
+          },
+          "requests": {
+            "cpu": "25m",
+            "memory": "64Mi"
+          }
+        }
+      },
+      "scheduler": {
+        "resources": {
+          "limits": {
+            "cpu": "1000m",
+            "memory": "2Gi"
+          },
+          "requests": {
+            "cpu": "200m",
+            "memory": "512Mi"
+          }
+        }
+      },
+      "triggerer": {
+        "resources": {
+          "limits": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "requests": {
+            "cpu": "50m",
+            "memory": "256Mi"
+          }
+        }
+      },
+      "web": {
+        "replicas": 1,
+        "resources": {
+          "limits": {
+            "cpu": "1000m",
+            "memory": "2Gi"
+          },
+          "requests": {
+            "cpu": "200m",
+            "memory": "512Mi"
+          }
+        }
+      },
+      "workers": {
+        "autoscaling": {
+          "enabled": false
+        },
+        "replicas": 1,
+        "resources": {
+          "limits": {
+            "cpu": "2000m",
+            "memory": "2560Mi"
+          },
+          "requests": {
+            "cpu": "200m",
+            "memory": "1Gi"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "db-credentials": "airflow-db-account",
+      "ebs-addon": "local-neuronsphere",
+      "eks-alb": "local-neuronsphere",
+      "eks-cluster": "eks-cluster",
+      "ext-secrets": "ext-secrets",
+      "logs": "airflow-logs",
+      "neptune": "global-graph",
+      "redis": "redis",
+      "storage": "local-neuronsphere",
+      "trino": "trino",
+      "trino-user": "trino-users",
+      "worker-compute": "local-neuronsphere"
+    }
+  },
+  {
+    "repo_instance_name": "airflow-db-account",
+    "repo_class_name": "hmd-database-account",
+    "repo_class_version": "0.1.3",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "db_name": "airflow",
+      "username": "airflow"
+    },
+    "dependencies": {
+      "create-service": "local-neuronsphere",
+      "database-instance": "environment-db"
+    }
+  },
+  {
+    "repo_instance_name": "airflow-logs",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "argo",
+    "repo_class_name": "hmd-app-argo",
+    "repo_class_version": "3.44.120",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "okta_oauth": false,
+      "okta_rbac": false,
+      "s3_endpoint": "http://neuronsphere:4566"
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "eks-alb": "local-neuronsphere",
+      "ext-secrets": "ext-secrets",
+      "logs": "argo-logs"
+    }
+  },
+  {
+    "repo_instance_name": "argo-logs",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "base-vpc",
+    "repo_class_name": "hmd-vpc",
+    "repo_class_version": "0.2.43",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "broker",
+    "repo_class_name": "hmd-inf-transform-broker",
+    "repo_class_version": "0.1.38",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "persistence": {
+        "storageClassName": "local-path"
+      }
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "eks-alb": "local-neuronsphere",
+      "eks-cluster": "eks-cluster",
+      "ext-secrets": "ext-secrets"
+    }
+  },
+  {
+    "repo_instance_name": "clickhouse-bootstrap",
+    "repo_class_name": "hmd-inf-clickhouse-bootstrap",
+    "repo_class_version": "0.1.16",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "clickhouse": {
+        "cluster": "default"
+      },
+      "databases": [
+        {
+          "engine": "Replicated",
+          "migrations": [
+            {
+              "name": "001-create-traces-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_traces_local (\n    Timestamp DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TraceId String CODEC(ZSTD(1)),\n    SpanId String CODEC(ZSTD(1)),\n    ParentSpanId String CODEC(ZSTD(1)),\n    TraceState String CODEC(ZSTD(1)),\n    SpanName LowCardinality(String) CODEC(ZSTD(1)),\n    SpanKind LowCardinality(String) CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    SpanAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    Duration Int64 CODEC(ZSTD(1)),\n    StatusCode LowCardinality(String) CODEC(ZSTD(1)),\n    StatusMessage String CODEC(ZSTD(1)),\n    Events Nested (\n        Timestamp DateTime64(9),\n        Name LowCardinality(String),\n        Attributes Map(LowCardinality(String), String)\n    ) CODEC(ZSTD(1)),\n    Links Nested (\n        TraceId String,\n        SpanId String,\n        TraceState String,\n        Attributes Map(LowCardinality(String), String)\n    ) CODEC(ZSTD(1)),\n    INDEX idx_trace_id TraceId TYPE bloom_filter(0.001) GRANULARITY 1,\n    INDEX idx_span_id SpanId TYPE bloom_filter(0.001) GRANULARITY 1,\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(Timestamp)\nORDER BY (ServiceName, SpanName, toUnixTimestamp(Timestamp), TraceId)\nTTL toDateTime(Timestamp) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "002-create-logs-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_logs_local (\n    Timestamp DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TimestampDate Date DEFAULT toDate(Timestamp),\n    TimestampTime DateTime DEFAULT toDateTime(Timestamp),\n    TraceId String CODEC(ZSTD(1)),\n    SpanId String CODEC(ZSTD(1)),\n    TraceFlags UInt32 CODEC(ZSTD(1)),\n    SeverityText LowCardinality(String) CODEC(ZSTD(1)),\n    SeverityNumber Int32 CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    Body String CODEC(ZSTD(1)),\n    ResourceSchemaUrl String CODEC(ZSTD(1)),\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeSchemaUrl String CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    ScopeAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    LogAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    INDEX idx_trace_id TraceId TYPE bloom_filter(0.001) GRANULARITY 1,\n    INDEX idx_span_id SpanId TYPE bloom_filter(0.001) GRANULARITY 1,\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1,\n    INDEX idx_body Body TYPE tokenbf_v1(32768, 3, 0) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(Timestamp)\nORDER BY (ServiceName, SeverityText, toUnixTimestamp(Timestamp), TraceId)\nTTL toDateTime(Timestamp) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "003-create-metrics-gauge-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_gauge_local (\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ResourceSchemaUrl String CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    ScopeAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeDroppedAttrCount UInt32 CODEC(ZSTD(1)),\n    ScopeSchemaUrl String CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricDescription String CODEC(ZSTD(1)),\n    MetricUnit String CODEC(ZSTD(1)),\n    Attributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    StartTimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    Value Float64 CODEC(ZSTD(1)),\n    Flags UInt32 CODEC(ZSTD(1)),\n    Exemplars Nested (\n        FilteredAttributes Map(LowCardinality(String), String),\n        TimeUnix DateTime64(9),\n        Value Float64,\n        SpanId String,\n        TraceId String\n    ) CODEC(ZSTD(1)),\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1,\n    INDEX idx_metric_name MetricName TYPE bloom_filter(0.01) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(TimeUnix)\nORDER BY (ServiceName, MetricName, Attributes, toUnixTimestamp64Nano(TimeUnix))\nTTL toDateTime(TimeUnix) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "004-create-metrics-sum-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_sum_local (\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ResourceSchemaUrl String CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    ScopeAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeDroppedAttrCount UInt32 CODEC(ZSTD(1)),\n    ScopeSchemaUrl String CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricDescription String CODEC(ZSTD(1)),\n    MetricUnit String CODEC(ZSTD(1)),\n    Attributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    StartTimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    Value Float64 CODEC(ZSTD(1)),\n    Flags UInt32 CODEC(ZSTD(1)),\n    AggregationTemporality Int32 CODEC(ZSTD(1)),\n    IsMonotonic Bool CODEC(ZSTD(1)),\n    Exemplars Nested (\n        FilteredAttributes Map(LowCardinality(String), String),\n        TimeUnix DateTime64(9),\n        Value Float64,\n        SpanId String,\n        TraceId String\n    ) CODEC(ZSTD(1)),\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1,\n    INDEX idx_metric_name MetricName TYPE bloom_filter(0.01) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(TimeUnix)\nORDER BY (ServiceName, MetricName, Attributes, toUnixTimestamp64Nano(TimeUnix))\nTTL toDateTime(TimeUnix) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "005-create-metrics-histogram-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_histogram_local (\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ResourceSchemaUrl String CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    ScopeAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeDroppedAttrCount UInt32 CODEC(ZSTD(1)),\n    ScopeSchemaUrl String CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricDescription String CODEC(ZSTD(1)),\n    MetricUnit String CODEC(ZSTD(1)),\n    Attributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    StartTimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    Count UInt64 CODEC(ZSTD(1)),\n    Sum Float64 CODEC(ZSTD(1)),\n    BucketCounts Array(UInt64) CODEC(ZSTD(1)),\n    ExplicitBounds Array(Float64) CODEC(ZSTD(1)),\n    Min Float64 CODEC(ZSTD(1)),\n    Max Float64 CODEC(ZSTD(1)),\n    Flags UInt32 CODEC(ZSTD(1)),\n    AggregationTemporality Int32 CODEC(ZSTD(1)),\n    Exemplars Nested (\n        FilteredAttributes Map(LowCardinality(String), String),\n        TimeUnix DateTime64(9),\n        Value Float64,\n        SpanId String,\n        TraceId String\n    ) CODEC(ZSTD(1)),\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1,\n    INDEX idx_metric_name MetricName TYPE bloom_filter(0.01) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(TimeUnix)\nORDER BY (ServiceName, MetricName, Attributes, toUnixTimestamp64Nano(TimeUnix))\nTTL toDateTime(TimeUnix) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "006-create-metrics-exp-histogram-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_exponential_histogram_local (\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ResourceSchemaUrl String CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    ScopeAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeDroppedAttrCount UInt32 CODEC(ZSTD(1)),\n    ScopeSchemaUrl String CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricDescription String CODEC(ZSTD(1)),\n    MetricUnit String CODEC(ZSTD(1)),\n    Attributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    StartTimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    Count UInt64 CODEC(ZSTD(1)),\n    Sum Float64 CODEC(ZSTD(1)),\n    Scale Int32 CODEC(ZSTD(1)),\n    ZeroCount UInt64 CODEC(ZSTD(1)),\n    PositiveOffset Int32 CODEC(ZSTD(1)),\n    PositiveBucketCounts Array(UInt64) CODEC(ZSTD(1)),\n    NegativeOffset Int32 CODEC(ZSTD(1)),\n    NegativeBucketCounts Array(UInt64) CODEC(ZSTD(1)),\n    Min Float64 CODEC(ZSTD(1)),\n    Max Float64 CODEC(ZSTD(1)),\n    Flags UInt32 CODEC(ZSTD(1)),\n    AggregationTemporality Int32 CODEC(ZSTD(1)),\n    Exemplars Nested (\n        FilteredAttributes Map(LowCardinality(String), String),\n        TimeUnix DateTime64(9),\n        Value Float64,\n        SpanId String,\n        TraceId String\n    ) CODEC(ZSTD(1)),\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1,\n    INDEX idx_metric_name MetricName TYPE bloom_filter(0.01) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(TimeUnix)\nORDER BY (ServiceName, MetricName, Attributes, toUnixTimestamp64Nano(TimeUnix))\nTTL toDateTime(TimeUnix) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "007-create-metrics-summary-local",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_summary_local (\n    ResourceAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ResourceSchemaUrl String CODEC(ZSTD(1)),\n    ScopeName String CODEC(ZSTD(1)),\n    ScopeVersion String CODEC(ZSTD(1)),\n    ScopeAttributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    ScopeDroppedAttrCount UInt32 CODEC(ZSTD(1)),\n    ScopeSchemaUrl String CODEC(ZSTD(1)),\n    ServiceName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricName LowCardinality(String) CODEC(ZSTD(1)),\n    MetricDescription String CODEC(ZSTD(1)),\n    MetricUnit String CODEC(ZSTD(1)),\n    Attributes Map(LowCardinality(String), String) CODEC(ZSTD(1)),\n    StartTimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    TimeUnix DateTime64(9) CODEC(Delta, ZSTD(1)),\n    Count UInt64 CODEC(ZSTD(1)),\n    Sum Float64 CODEC(ZSTD(1)),\n    ValueAtQuantiles Nested (\n        Quantile Float64,\n        Value Float64\n    ) CODEC(ZSTD(1)),\n    INDEX idx_service_name ServiceName TYPE bloom_filter(0.01) GRANULARITY 1,\n    INDEX idx_metric_name MetricName TYPE bloom_filter(0.01) GRANULARITY 1\n) ENGINE = ReplicatedMergeTree\nPARTITION BY toDate(TimeUnix)\nORDER BY (ServiceName, MetricName, Attributes, toUnixTimestamp64Nano(TimeUnix))\nTTL toDateTime(TimeUnix) + INTERVAL 30 DAY DELETE\nSETTINGS index_granularity = 8192, ttl_only_drop_parts = 1\n"
+            },
+            {
+              "name": "008-create-traces-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_traces\n  AS otel.otel_traces_local\n  ENGINE = Distributed('default', 'otel', 'otel_traces_local', rand())\n"
+            },
+            {
+              "name": "009-create-logs-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_logs\n  AS otel.otel_logs_local\n  ENGINE = Distributed('default', 'otel', 'otel_logs_local', rand())\n"
+            },
+            {
+              "name": "010-create-metrics-gauge-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_gauge\n  AS otel.otel_metrics_gauge_local\n  ENGINE = Distributed('default', 'otel', 'otel_metrics_gauge_local', rand())\n"
+            },
+            {
+              "name": "011-create-metrics-sum-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_sum\n  AS otel.otel_metrics_sum_local\n  ENGINE = Distributed('default', 'otel', 'otel_metrics_sum_local', rand())\n"
+            },
+            {
+              "name": "012-create-metrics-histogram-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_histogram\n  AS otel.otel_metrics_histogram_local\n  ENGINE = Distributed('default', 'otel', 'otel_metrics_histogram_local', rand())\n"
+            },
+            {
+              "name": "013-create-metrics-exp-histogram-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_exponential_histogram\n  AS otel.otel_metrics_exponential_histogram_local\n  ENGINE = Distributed('default', 'otel', 'otel_metrics_exponential_histogram_local', rand())\n"
+            },
+            {
+              "name": "014-create-metrics-summary-distributed",
+              "sql": "CREATE TABLE IF NOT EXISTS otel.otel_metrics_summary\n  AS otel.otel_metrics_summary_local\n  ENGINE = Distributed('default', 'otel', 'otel_metrics_summary_local', rand())\n"
+            }
+          ],
+          "name": "otel",
+          "zkPath": "/clickhouse/databases/otel/{cluster}"
+        }
+      ]
+    },
+    "dependencies": {
+      "clickhouse": "clickhouse",
+      "eks-alb": "local-neuronsphere",
+      "ext-secrets": "ext-secrets",
+      "users": "clickhouse-user"
+    }
+  },
+  {
+    "repo_instance_name": "device",
+    "repo_class_name": "hmd-ms-librarian",
+    "repo_class_version": "0.5",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "content_item_type_config": "hmd-config-device-cit@0.1.7:configuration",
+      "content_path_configs": {
+        "data": [
+          {
+            "path": "/hmd_lang_librarian.ns_day@iso_date:local/hmd_lang_librarian.content_category@category_name:local",
+            "relationships": [
+              "hmd_lang_librarian.content_item_has_ns_day:local",
+              "hmd_lang_librarian.content_item_has_content_category:local"
+            ]
+          }
+        ],
+        "devrun": [
+          {
+            "path": "/hmd_lang_librarian.ns_day@iso_date:local/hmd_lang_librarian.content_category@category_name:local",
+            "relationships": [
+              "hmd_lang_librarian.content_item_has_ns_day:local",
+              "hmd_lang_librarian.content_item_has_content_category:local"
+            ]
+          }
+        ],
+        "output": [
+          {
+            "path": "/hmd_lang_librarian.ns_day@iso_date:local/hmd_lang_librarian.content_category@category_name:local",
+            "relationships": [
+              "hmd_lang_librarian.content_item_has_ns_day:local",
+              "hmd_lang_librarian.content_item_has_content_category:local"
+            ]
+          }
+        ]
+      },
+      "create_okta_identity": false,
+      "memory_size": 256,
+      "use_api_key": false,
+      "use_log_formatter": true
+    },
+    "dependencies": {
+      "base-vpc": "local-neuronsphere",
+      "datadog-lambda": "local-neuronsphere",
+      "lib-repo": "device-lib",
+      "logging": "local-neuronsphere",
+      "neptune-db": "global-graph"
+    }
+  },
+  {
+    "repo_instance_name": "device-lib",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "eks-cluster",
+    "repo_class_name": "hmd-inf-eks-cluster",
+    "repo_class_version": "0.7.119",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "dependencies": {
+      "base-vpc": "base-vpc",
+      "datadog-lambda": "local-neuronsphere"
+    }
+  },
+  {
+    "repo_instance_name": "environment-db",
+    "repo_class_name": "hmd-postgres-rds",
+    "repo_class_version": "0.8.53",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "dependencies": {
+      "base-vpc": "base-vpc",
+      "datadog-lambda": "local-neuronsphere",
+      "rds-loggroup": "local-neuronsphere"
+    }
+  },
+  {
+    "repo_instance_name": "ext-secrets",
+    "repo_class_name": "hmd-inf-ext-secrets",
+    "repo_class_version": "0.2.56",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "clusterSecretStore": {
+        "enabled": true,
+        "local": true,
+        "localAccessKeyId": "000000000001",
+        "name": "aws-secrets-manager"
+      },
+      "dockerRepoSecret": {
+        "enabled": true,
+        "secretStoreName": "aws-parameter-store"
+      },
+      "docker_config_json": "{\"auths\": {\"ghcr.io\": {\"auth\": \"YWxleGJ1cmdvb246Z2hwX1ZrYXlGT2t0MlZxRzBlMnVOaTJ1eWhVUnkzNkZqNzBtR2RwZQ==\"}, \"localhost:5100\": {\"auth\": \"QVdTOmZsb2Np\"}}}",
+      "extraEnv": [
+        {
+          "name": "AWS_ENDPOINT_URL",
+          "value": "http://neuronsphere:4566"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": "000000000001"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": "000000000000"
+        }
+      ],
+      "installCRDs": false,
+      "parameterStoreSecretStore": {
+        "enabled": true,
+        "local": true,
+        "localAccessKeyId": "000000000001",
+        "name": "aws-parameter-store"
+      }
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "crds": "ext-secrets-crds",
+      "eks-cluster": "eks-cluster"
+    }
+  },
+  {
+    "repo_instance_name": "ext-secrets-crds",
+    "repo_class_name": "hmd-inf-ext-secrets-crds",
+    "repo_class_version": "0.1.8",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "eks-cluster": "eks-cluster"
+    }
+  },
+  {
+    "repo_instance_name": "global-graph",
+    "repo_class_name": "hmd-inf-neptune",
+    "repo_class_version": "0.3.38",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "engine_version": "1.4.7.0",
+      "graph_host": "global-graph-local",
+      "graph_port": 8182,
+      "ready_timeout": 90
+    },
+    "dependencies": {
+      "base-vpc": "local-neuronsphere"
+    }
+  },
+  {
+    "repo_instance_name": "hive-metastore",
+    "repo_class_name": "hmd-inf-hive-metastore",
+    "repo_class_version": "0.2.91",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "conf": {
+        "metastoreSite": {
+          "fs.s3a.access.key": "test",
+          "fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider",
+          "fs.s3a.connection.ssl.enabled": "false",
+          "fs.s3a.endpoint": "http://neuronsphere:4566",
+          "fs.s3a.path.style.access": "true",
+          "fs.s3a.secret.key": "test"
+        }
+      },
+      "initResources": {
+        "limits": {
+          "cpu": "500m",
+          "memory": "768Mi"
+        },
+        "requests": {
+          "cpu": "100m",
+          "memory": "256Mi"
+        }
+      },
+      "replicaCount": 1,
+      "resources": {
+        "limits": {
+          "cpu": "1000m",
+          "memory": "2Gi"
+        },
+        "requests": {
+          "cpu": "250m",
+          "memory": "768Mi"
+        }
+      }
+    },
+    "dependencies": {
+      "base-vpc": "local-neuronsphere",
+      "compute": "local-neuronsphere",
+      "db-credentials": "hive-metastore-db-account",
+      "eks-alb": "local-neuronsphere",
+      "ext-secrets": "ext-secrets"
+    }
+  },
+  {
+    "repo_instance_name": "hive-metastore-db-account",
+    "repo_class_name": "hmd-database-account",
+    "repo_class_version": "0.1.3",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "db_name": "hive_metastore",
+      "username": "hive_metastore"
+    },
+    "dependencies": {
+      "create-service": "local-neuronsphere",
+      "database-instance": "environment-db"
+    }
+  },
+  {
+    "repo_instance_name": "local-neuronsphere",
+    "repo_class_name": "hmd-cli-neuronsphere",
+    "repo_class_version": "1.0",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "ms-gozer",
+    "repo_class_name": "hmd-ms-gozer",
+    "repo_class_version": "0.1",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "hmd_log_level": {
+        "HMD": "INFO"
+      },
+      "use_log_formatter": true
+    },
+    "dependencies": {
+      "base-vpc": "local-neuronsphere",
+      "datadog-lambda": "local-neuronsphere",
+      "dbaccounts": "transform-db-account",
+      "device_librarians": "device",
+      "logging": "local-neuronsphere",
+      "neptune_dbs": "global-graph"
+    }
+  },
+  {
+    "repo_instance_name": "nsreporting",
+    "repo_class_name": "hmd-ms-librarian",
+    "repo_class_version": "0.5",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "content_item_type_config": "hmd-config-nsreporting-cit@0.1:entity",
+      "content_path_configs": {
+        "data": [
+          {
+            "path": "/hmd_lang_librarian.ns_day@iso_date:local/hmd_lang_librarian.content_category@category_name:local",
+            "relationships": [
+              "hmd_lang_librarian.content_item_has_ns_day:local",
+              "hmd_lang_librarian.content_item_has_content_category:local"
+            ]
+          }
+        ],
+        "devrun": [
+          {
+            "path": "/hmd_lang_librarian.ns_day@iso_date:local/hmd_lang_librarian.content_category@category_name:local",
+            "relationships": [
+              "hmd_lang_librarian.content_item_has_ns_day:local",
+              "hmd_lang_librarian.content_item_has_content_category:local"
+            ]
+          }
+        ],
+        "output": [
+          {
+            "path": "/hmd_lang_librarian.ns_day@iso_date:local/hmd_lang_librarian.content_category@category_name:local",
+            "relationships": [
+              "hmd_lang_librarian.content_item_has_ns_day:local",
+              "hmd_lang_librarian.content_item_has_content_category:local"
+            ]
+          }
+        ]
+      },
+      "create_okta_identity": false,
+      "memory_size": 256,
+      "use_api_key": false,
+      "use_log_formatter": true
+    },
+    "dependencies": {
+      "base-vpc": "local-neuronsphere",
+      "datadog-lambda": "local-neuronsphere",
+      "lib-repo": "nsreporting-lib",
+      "logging": "local-neuronsphere",
+      "neptune-db": "global-graph"
+    }
+  },
+  {
+    "repo_instance_name": "nsreporting-lib",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "opa-bucket",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "otel-collector",
+    "repo_class_name": "hmd-inf-otel-collector",
+    "repo_class_version": "0.1.188",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "cluster_collection": {
+        "enabled": false
+      },
+      "debug": {
+        "verbosity": "detailed"
+      },
+      "gateway": {
+        "autoscaling": {
+          "enabled": false
+        },
+        "pdbMinAvailable": 0,
+        "replicaCount": 1,
+        "resources": {
+          "limits": {
+            "cpu": "1000m",
+            "memory": "1Gi"
+          },
+          "requests": {
+            "cpu": "200m",
+            "memory": "512Mi"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "clickhouse": "clickhouse",
+      "clickhouse-bootstrap": "clickhouse-bootstrap",
+      "clickhouse-user": "clickhouse-user",
+      "compute": "local-neuronsphere",
+      "eks-alb": "local-neuronsphere",
+      "ext-secrets": "ext-secrets"
+    }
+  },
+  {
+    "repo_instance_name": "project-bucket",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "redis",
+    "repo_class_name": "hmd-inf-redis",
+    "repo_class_version": "0.1.47",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "persistence": {
+        "storage_class": "local-path"
+      },
+      "replicas": 1
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "eks-cluster": "eks-cluster",
+      "ext-secrets": "ext-secrets"
+    }
+  },
+  {
+    "repo_instance_name": "secret-key",
+    "repo_class_name": "hmd-inf-superset-secret-key",
+    "repo_class_version": "0.1.8",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  },
+  {
+    "repo_instance_name": "superset",
+    "repo_class_name": "hmd-inf-superset",
+    "repo_class_version": "0.5.237",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "alertReports": {
+        "enabled": false
+      },
+      "okta_oauth": false,
+      "replicaCount": 1,
+      "resources": {
+        "limits": {
+          "cpu": "2000m",
+          "memory": "3Gi"
+        },
+        "requests": {
+          "cpu": "250m",
+          "memory": "1536Mi"
+        }
+      },
+      "supersetWorker": {
+        "resources": {
+          "limits": {
+            "cpu": "1000m",
+            "memory": "2Gi"
+          },
+          "requests": {
+            "cpu": "100m",
+            "memory": "768Mi"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "db-credentials": "superset-db-account",
+      "eks-alb": "local-neuronsphere",
+      "ext-secrets": "ext-secrets",
+      "redis": "redis",
+      "secret-key": "secret-key"
+    }
+  },
+  {
+    "repo_instance_name": "superset-db-account",
+    "repo_class_name": "hmd-database-account",
+    "repo_class_version": "0.1.3",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "db_name": "superset",
+      "username": "superset"
+    },
+    "dependencies": {
+      "create-service": "local-neuronsphere",
+      "database-instance": "environment-db"
+    }
+  },
+  {
+    "repo_instance_name": "transform",
+    "repo_class_name": "hmd-ms-transform",
+    "repo_class_version": "1.0",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "airflow_auth": {
+        "password": "airflow",
+        "username": "airflow"
+      },
+      "airflow_monitor": {
+        "enable": true
+      },
+      "backfill_worker": {
+        "image": {
+          "tag": "0.1.44-local"
+        },
+        "resources": {
+          "requests": {
+            "cpu": "25m",
+            "memory": "256Mi"
+          }
+        }
+      },
+      "create_okta_identity": false,
+      "create_worker_service_account": true,
+      "enable_transform_driven_clusters": false,
+      "hmd_log_level": {
+        "HMD": "DEBUG"
+      },
+      "inst_worker": {
+        "image": {
+          "tag": "0.1.44-local"
+        },
+        "resources": {
+          "requests": {
+            "cpu": "50m",
+            "memory": "256Mi"
+          }
+        }
+      },
+      "notify_retry_worker": {
+        "resources": {
+          "requests": {
+            "cpu": "25m",
+            "memory": "64Mi"
+          }
+        }
+      },
+      "query_worker": {
+        "image": {
+          "tag": "0.1.44-local"
+        },
+        "resources": {
+          "requests": {
+            "cpu": "25m",
+            "memory": "256Mi"
+          }
+        }
+      },
+      "use_log_formatter": true,
+      "use_query_creator": {
+        "enable": true
+      },
+      "use_scheduler": {
+        "enable": true
+      }
+    },
+    "dependencies": {
+      "airflow": "airflow",
+      "argo": "argo",
+      "base-vpc": "local-neuronsphere",
+      "broker": "broker",
+      "compute": "local-neuronsphere",
+      "db-credentials": "transform-db-account",
+      "default-compute": "local-neuronsphere",
+      "eks-alb": "local-neuronsphere",
+      "eks-cluster": "eks-cluster",
+      "ext-secrets": "ext-secrets",
+      "neptune-db": "global-graph",
+      "redis": "redis"
+    }
+  },
+  {
+    "repo_instance_name": "transform-db-account",
+    "repo_class_name": "hmd-database-account",
+    "repo_class_version": "0.1.3",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "db_name": "transform",
+      "username": "transform"
+    },
+    "dependencies": {
+      "create-service": "local-neuronsphere",
+      "database-instance": "environment-db"
+    }
+  },
+  {
+    "repo_instance_name": "trino",
+    "repo_class_name": "hmd-inf-trino",
+    "repo_class_version": "0.1.225",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "connectors": {
+        "graph.properties": "connector.name=nsgraph\nhost=global-graph\nport=8182\nprotocol=ws\n"
+      },
+      "coordinatorResources": {
+        "limits": {
+          "cpu": "2000m",
+          "memory": "2560Mi"
+        },
+        "requests": {
+          "cpu": "500m",
+          "memory": "1792Mi"
+        }
+      },
+      "graph_endpoint": "",
+      "hive_properties": {
+        "s3.aws-access-key": "test",
+        "s3.aws-secret-key": "test",
+        "s3.endpoint": "http://neuronsphere:4566",
+        "s3.path-style-access": "true",
+        "s3.region": "us-east-1"
+      },
+      "server": {
+        "config": {
+          "authenticationType": "",
+          "query": {
+            "heapHeadroomPerNode": "384MB",
+            "maxMemory": "1GB",
+            "maxMemoryPerNode": "512MB",
+            "maxTotalMemory": "2GB"
+          }
+        },
+        "jvm": {
+          "coordinatorMaxHeapSize": "1G",
+          "workerMaxHeapSize": "1536M"
+        },
+        "readinessProbe": {
+          "failureThreshold": 12
+        },
+        "workers": 1
+      },
+      "workerResources": {
+        "limits": {
+          "cpu": "2000m",
+          "memory": "3Gi"
+        },
+        "requests": {
+          "cpu": "500m",
+          "memory": "2560Mi"
+        }
+      }
+    },
+    "dependencies": {
+      "compute": "local-neuronsphere",
+      "eks-alb": "local-neuronsphere",
+      "ext-secrets": "ext-secrets",
+      "graph-db": "global-graph",
+      "metastore": "hive-metastore",
+      "users": "trino-users",
+      "worker-compute": "local-neuronsphere"
+    }
+  },
+  {
+    "repo_instance_name": "trino-users",
+    "repo_class_name": "hmd-inf-credentials",
+    "repo_class_version": "0.1.6",
+    "deployment_id": "",
+    "status": "DEPLOYED",
+    "instance_configuration": {
+      "username": "trino-users"
+    }
+  },
+  {
+    "repo_instance_name": "trino-warehouse-storage",
+    "repo_class_name": "hmd-inf-s3bucket",
+    "repo_class_version": "0.1.18",
+    "deployment_id": "",
+    "status": "DEPLOYED"
+  }
+]
