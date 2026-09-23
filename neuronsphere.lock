@@ -13,7 +13,7 @@ repo_class_name = 'hmd-database-account'
 version = '0.1.3'
 profiles = []
 content_path = 'repository:/hmd-database-account/0.1.3/hmd-database-account_0.1.3_build.zip'
-digest = 'sha256:6a900bbd2fb0d8f90bd580f0b7bcd1f73b7a22574eb7d6a5247e7e1bab652ed1'
+digest = 'sha256:d71d35698968922e0ccf82d09be66223986bfacb82aa5133bfd54d5762a4f92f'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-credentials'
