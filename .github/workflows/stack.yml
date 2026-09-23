@@ -27,10 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: neuronsphere/hmd-cli-neuronsphere/.github/actions/setup-nsctl@main
-        with:
-          # TODO(before first CI run): the first hmd-cli-neuronsphere release
-          # that carries `nsctl stack` and DistributionRegistry (> 1.0.212).
-          version: NSCTL_VERSION_PLACEHOLDER
       # What `hmd login service` does, without installing the Python CLI: a
       # client-credentials grant from the service client. `nsctl stack build`
       # and `nsctl lock --resolve` fetch the pinned zips from the Artifact
@@ -71,10 +67,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: neuronsphere/hmd-cli-neuronsphere/.github/actions/setup-nsctl@main
-        with:
-          # TODO(before first CI run): the first hmd-cli-neuronsphere release
-          # that carries `nsctl stack` and DistributionRegistry (> 1.0.212).
-          version: NSCTL_VERSION_PLACEHOLDER
       # What `hmd login service` does, without installing the Python CLI: a
       # client-credentials grant from the service client. `nsctl stack build`
       # and `nsctl lock --resolve` fetch the pinned zips from the Artifact
@@ -113,10 +105,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: neuronsphere/hmd-cli-neuronsphere/.github/actions/setup-nsctl@main
-        with:
-          # TODO(before first CI run): the first hmd-cli-neuronsphere release
-          # that carries `nsctl stack` and DistributionRegistry (> 1.0.212).
-          version: NSCTL_VERSION_PLACEHOLDER
       # What `hmd login service` does, without installing the Python CLI: a
       # client-credentials grant from the service client. `nsctl stack build`
       # and `nsctl lock --resolve` fetch the pinned zips from the Artifact
