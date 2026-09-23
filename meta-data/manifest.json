@@ -22,12 +22,12 @@
         "repo_class_name": "hmd-inf-neptune",
         "required": "true"
       }
-    },
-    "commands": []
+    }
   },
   "description": "Airflow, Trino and Superset with what they need -- the smallest useful NeuronSphere analytics platform",
   "license": "Apache-2.0",
   "local": {
+    "stack": true,
     "default_profiles": [
       "airflow",
       "superset",
