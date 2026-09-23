@@ -4,9 +4,9 @@ generated_from = 'pins'
 
 [[resolved]]
 repo_class_name = 'hmd-app-airflow'
-version = '0.4.348'
+version = '0.4.350'
 profiles = ['airflow']
-content_path = 'repository:/hmd-app-airflow/0.4.348/hmd-app-airflow_0.4.348_build.zip'
+content_path = 'repository:/hmd-app-airflow/0.4.350/hmd-app-airflow_0.4.350_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-database-account'
@@ -22,36 +22,36 @@ content_path = 'repository:/hmd-inf-credentials/0.1.6/hmd-inf-credentials_0.1.6_
 
 [[resolved]]
 repo_class_name = 'hmd-inf-hive-metastore'
-version = '0.2.91'
+version = '0.2.93'
 profiles = []
-content_path = 'repository:/hmd-inf-hive-metastore/0.2.91/hmd-inf-hive-metastore_0.2.91_build.zip'
+content_path = 'repository:/hmd-inf-hive-metastore/0.2.93/hmd-inf-hive-metastore_0.2.93_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-redis'
-version = '0.1.47'
+version = '0.1.49'
 profiles = []
-content_path = 'repository:/hmd-inf-redis/0.1.47/hmd-inf-redis_0.1.47_build.zip'
+content_path = 'repository:/hmd-inf-redis/0.1.49/hmd-inf-redis_0.1.49_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-s3bucket'
-version = '0.1.18'
+version = '0.1.19'
 profiles = []
-content_path = 'repository:/hmd-inf-s3bucket/0.1.18/hmd-inf-s3bucket_0.1.18_build.zip'
+content_path = 'repository:/hmd-inf-s3bucket/0.1.19/hmd-inf-s3bucket_0.1.19_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-superset'
-version = '0.5.237'
+version = '0.5.238'
 profiles = ['superset']
-content_path = 'repository:/hmd-inf-superset/0.5.237/hmd-inf-superset_0.5.237_build.zip'
+content_path = 'repository:/hmd-inf-superset/0.5.238/hmd-inf-superset_0.5.238_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-superset-secret-key'
-version = '0.1.8'
+version = '0.1.10'
 profiles = []
-content_path = 'repository:/hmd-inf-superset-secret-key/0.1.8/hmd-inf-superset-secret-key_0.1.8_build.zip'
+content_path = 'repository:/hmd-inf-superset-secret-key/0.1.10/hmd-inf-superset-secret-key_0.1.10_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-trino'
-version = '0.1.225'
+version = '0.1.227'
 profiles = ['trino']
-content_path = 'repository:/hmd-inf-trino/0.1.225/hmd-inf-trino_0.1.225_build.zip'
+content_path = 'repository:/hmd-inf-trino/0.1.227/hmd-inf-trino_0.1.227_build.zip'

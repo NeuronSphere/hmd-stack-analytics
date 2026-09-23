@@ -1,12 +1,6 @@
 {
   "build": {},
   "deploy": {
-    "commands": [
-      [
-        "exec",
-        "true"
-      ]
-    ],
     "dependencies": {
       "compute": {
         "repo_class_name": "hmd-cli-neuronsphere",
@@ -28,7 +22,8 @@
         "repo_class_name": "hmd-inf-neptune",
         "required": "true"
       }
-    }
+    },
+    "commands": []
   },
   "description": "Airflow, Trino and Superset with what they need -- the smallest useful NeuronSphere analytics platform",
   "license": "Apache-2.0",
@@ -92,14 +87,15 @@
                 "memory": "768Mi"
               }
             }
-          }
+          },
+          "platformSecretStore": "parameterStoreSecretStore"
         },
         "instance_name": "superset",
         "profiles": [
           "superset"
         ],
         "repo_class_name": "hmd-inf-superset",
-        "version_spec": "== 0.5.237"
+        "version_spec": "== 0.5.238"
       },
       {
         "dependencies": {
@@ -168,7 +164,7 @@
           "trino"
         ],
         "repo_class_name": "hmd-inf-trino",
-        "version_spec": "== 0.1.225"
+        "version_spec": "== 0.1.227"
       },
       {
         "dependencies": {
@@ -209,7 +205,7 @@
               }
             ],
             "image": {
-              "tag": "0.4.169-local"
+              "tag": "0.4.170"
             },
             "kubernetesPodTemplate": {
               "resources": {
@@ -306,14 +302,15 @@
                 "memory": "1Gi"
               }
             }
-          }
+          },
+          "platformSecretStore": "parameterStoreSecretStore"
         },
         "instance_name": "airflow",
         "profiles": [
           "airflow"
         ],
         "repo_class_name": "hmd-app-airflow",
-        "version_spec": "== 0.4.348"
+        "version_spec": "== 0.4.350"
       },
       {
         "dependencies": {
@@ -342,12 +339,12 @@
         },
         "instance_name": "redis",
         "repo_class_name": "hmd-inf-redis",
-        "version_spec": "== 0.1.47"
+        "version_spec": "== 0.1.49"
       },
       {
         "instance_name": "secret-key",
         "repo_class_name": "hmd-inf-superset-secret-key",
-        "version_spec": "== 0.1.8"
+        "version_spec": "== 0.1.10"
       },
       {
         "dependencies": {
@@ -388,11 +385,12 @@
               "cpu": "250m",
               "memory": "768Mi"
             }
-          }
+          },
+          "platformSecretStore": "parameterStoreSecretStore"
         },
         "instance_name": "hive-metastore",
         "repo_class_name": "hmd-inf-hive-metastore",
-        "version_spec": "== 0.2.91"
+        "version_spec": "== 0.2.93"
       },
       {
         "instance_configuration": {
@@ -418,7 +416,7 @@
       {
         "instance_name": "airflow-logs",
         "repo_class_name": "hmd-inf-s3bucket",
-        "version_spec": "== 0.1.18"
+        "version_spec": "== 0.1.19"
       },
       {
         "dependencies": {
