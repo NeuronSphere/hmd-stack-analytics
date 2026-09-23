@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 env:
-  STACK_REF: ghcr.io/${{ github.repository_owner }}/stacks/analytics
+  STACK_REF: ghcr.io/neuronsphere/stacks/analytics
 
 jobs:
   verify:
