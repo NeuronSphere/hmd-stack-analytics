@@ -4,9 +4,9 @@ generated_from = 'pins'
 
 [[resolved]]
 repo_class_name = 'hmd-app-airflow'
-version = '0.4.351'
+version = '0.4.352'
 profiles = ['airflow']
-content_path = 'repository:/hmd-app-airflow/0.4.351/hmd-app-airflow_0.4.351_build.zip'
+content_path = 'repository:/hmd-app-airflow/0.4.352/hmd-app-airflow_0.4.352_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-database-account'
@@ -42,9 +42,9 @@ content_path = 'repository:/hmd-inf-s3bucket/0.1.19/hmd-inf-s3bucket_0.1.19_buil
 
 [[resolved]]
 repo_class_name = 'hmd-inf-superset'
-version = '0.5.239'
+version = '0.5.240'
 profiles = ['superset']
-content_path = 'repository:/hmd-inf-superset/0.5.239/hmd-inf-superset_0.5.239_build.zip'
+content_path = 'repository:/hmd-inf-superset/0.5.240/hmd-inf-superset_0.5.240_build.zip'
 
 [[resolved]]
 repo_class_name = 'hmd-inf-superset-secret-key'

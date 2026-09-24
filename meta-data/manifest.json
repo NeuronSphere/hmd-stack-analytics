@@ -95,7 +95,7 @@
           "superset"
         ],
         "repo_class_name": "hmd-inf-superset",
-        "version_spec": "== 0.5.239"
+        "version_spec": "== 0.5.240"
       },
       {
         "dependencies": {
@@ -310,7 +310,7 @@
           "airflow"
         ],
         "repo_class_name": "hmd-app-airflow",
-        "version_spec": "== 0.4.351"
+        "version_spec": "== 0.4.352"
       },
       {
         "dependencies": {
