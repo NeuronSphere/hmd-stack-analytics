@@ -434,5 +434,20 @@
     ],
     "version": 1
   },
-  "name": "hmd-stack-analytics"
+  "name": "hmd-stack-analytics",
+  "access": [
+    {
+      "name": "airflow",
+      "url": "http://{ingress_host}/",
+      "instance": "airflow",
+      "username": "airflow",
+      "notes": "This stack pins a single Admin user, airflow/airflow, replacing the admin and user fixtures hmd-app-airflow ships. Both are plaintext fixtures in instance_configuration, not secrets."
+    },
+    {
+      "name": "trino",
+      "url": "http://{ingress_host}/",
+      "instance": "trino",
+      "notes": "Any username, no password: local Trino runs with no authenticator, so the name you type becomes the query user. Catalogs hive and graph. The JDBC/CLI port is the one nsctl env status prints."
+    }
+  ]
 }
