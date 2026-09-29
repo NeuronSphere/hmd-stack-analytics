@@ -16,11 +16,24 @@ verifies every pinned RepoClass against its digest, declares the instances
 in the environment and deploys them. `nsctl env status` prints where the
 three UIs answer once the deploy settles.
 
-| UI       | Where                                        | Sign in                         |
-|----------|----------------------------------------------|---------------------------------|
-| Airflow  | `http://airflow.local.neuronsphere.io`       | `airflow` / `airflow`           |
-| Superset | `http://superset.local.neuronsphere.io`      | `admin` / `admin`               |
-| Trino    | `localhost:19033` (JDBC/CLI) or `http://trino.local.neuronsphere.io` | any user, no password; catalogs `hive`, `graph` |
+| UI       | Where                                   | Sign in                         |
+|----------|-----------------------------------------|---------------------------------|
+| Airflow  | `http://airflow.ns.local`               | `airflow` / `airflow`           |
+| Superset | `http://superset.ns.local`              | `admin` / `admin`               |
+| Trino    | `http://trino.ns.local`, or the `localhost` port `nsctl env status` prints for JDBC/CLI | any user, no password; catalogs `hive`, `graph` |
+
+Those names are what the deployed Ingress objects carry: the charts render
+`<instance>.local.neuronsphere.io` and `nsctl` rewrites the host to
+`<instance>.ns.local`, the one suffix its resolver owns. In an environment
+other than the default the name gains the slug -- `superset.dev.ns.local`.
+Reaching any of them costs one privileged step, once per machine:
+
+```sh
+nsctl dns install
+```
+
+which prints the resolver line for you to run; `nsctl` never takes root
+itself. Without it the UIs are still there, just not resolvable by name.
 
 ## What is in it
 
