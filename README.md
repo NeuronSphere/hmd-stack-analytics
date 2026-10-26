@@ -6,7 +6,7 @@ environment with one command and free to use: no tenant, no login, no token.
 
 ```sh
 nsctl env start
-nsctl stack add analytics --apply
+nsctl bundle add analytics --apply
 ```
 
 That is the whole install. The first line brings up the local substrate
@@ -59,8 +59,8 @@ local environment already provides -- the cluster (`eks-cluster`), the
 compute/ingress substrate (`local-neuronsphere`), the environment database
 (`environment-db`), External Secrets (`ext-secrets`) and the global graph
 (`global-graph`). Exact pins live in [`neuronsphere.lock`](neuronsphere.lock);
-the declared instance configuration in
-[`meta-data/manifest.json`](meta-data/manifest.json).
+the roles, their bindings and instance configuration in
+[`meta-data/bundles/analytics.json`](meta-data/bundles/analytics.json).
 
 Every layer carries a licence declaration. The stack itself and all eleven
 companion RepoClasses are Apache-2.0.
@@ -70,22 +70,23 @@ companion RepoClasses are Apache-2.0.
 Each root is a profile of the same name, and all three are on by default:
 
 ```sh
-nsctl stack add analytics --profile trino            # Trino and the metastore only
-nsctl stack add analytics --profile superset,trino   # no Airflow
-nsctl stack add analytics --env dev --name superset=bi
+nsctl bundle add analytics --profile trino            # Trino and the metastore only
+nsctl bundle add analytics --profile superset,trino   # no Airflow
+nsctl bundle add analytics --env dev --name superset=bi
 ```
 
-`nsctl stack list` shows what is declared; `nsctl stack remove analytics`
+`nsctl bundle list` shows what is declared; `nsctl bundle remove analytics`
 undeclares it (nothing is torn down until `nsctl env apply`).
 
 ## How it is built
 
-This repository is a NeuronSphere RepoClass with an empty build: its
-manifest's `local` section and its lock *are* the product. It was derived
-from a running local platform with
+This repository is a NeuronSphere RepoClass with an empty build: its bundle
+file, `meta-data/bundles/analytics.json`, and its lock *are* the product
+(hmd-ms-deployment NERD0019: a stack is a bundle). It was derived from a
+running local platform with
 
 ```sh
-nsctl stack init hmd-stack-analytics --from-env local --select superset,trino,airflow
+nsctl bundle init hmd-stack-analytics --from-env local --select superset,trino,airflow
 ```
 
 which walks each root's dependency roles through the environment's graph,
@@ -103,7 +104,7 @@ pins exact versions.
 (NERD019 in hmd-cli-neuronsphere):
 
 - **verify**, on every pull request: `nsctl repoclass validate`, then
-  `nsctl stack build`, which fetches each pinned zip from the Artifact
+  `nsctl bundle build`, which fetches each pinned zip from the Artifact
   Librarian, checks digests and assembles an OCI image layout that is
   uploaded as a workflow artifact.
 - **release**, on every push to `main`: builds again and pushes the layout
@@ -120,7 +121,7 @@ To re-derive locally (offline, from the checked-in BOM) and check that the
 manifest still matches:
 
 ```sh
-nsctl stack init hmd-stack-analytics --path . --from-bom meta-data/reference-bom.json \
+nsctl bundle init hmd-stack-analytics --path . --from-bom meta-data/reference-bom.json \
   --select superset,trino,airflow --diff
 ```
 
