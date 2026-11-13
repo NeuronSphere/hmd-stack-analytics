@@ -391,11 +391,6 @@
         "localAccessKeyId": "000000000001",
         "name": "aws-secrets-manager"
       },
-      "dockerRepoSecret": {
-        "enabled": true,
-        "secretStoreName": "aws-parameter-store"
-      },
-      "docker_config_json": "{\"auths\": {\"ghcr.io\": {\"auth\": \"YWxleGJ1cmdvb246Z2hwX1ZrYXlGT2t0MlZxRzBlMnVOaTJ1eWhVUnkzNkZqNzBtR2RwZQ==\"}, \"localhost:5100\": {\"auth\": \"QVdTOmZsb2Np\"}}}",
       "extraEnv": [
         {
           "name": "AWS_ENDPOINT_URL",
